@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <title>林火风险系统</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="lib/ol.css" rel="stylesheet" type="text/css" />
+    <link href="css/index.css" rel="stylesheet" type="text/css" />
+    <link href="css/reset.css" rel="stylesheet" type="text/css" />
+    <script src="lib/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script src="lib/MapGis_ol_product.js" type="text/javascript"></script>
+    <script src="lib/axios.min.js"></script>
+    <script src="lib/jspdf.min.js" type="text/javascript"></script>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/4.7.0/echarts-en.common.js"></script>
+
+</head>
+
+<body>
+    <!-- <div id="mapCon" style="width: 100%; height: 95%; position: absolute;">
+        <div id="mouse-position" style="float: left; position: absolute; bottom: 5px; width: 350px; height: 20px; z-index: 2000;">
+        </div>
+    </div> -->
+    <div class="container-title">光明区林火立体化监测网络与应急响应系统</div>
+
+    <div class="container">
+        <div class="notice">关于钓神山林火风险等级监控要求与通知</div>
+        <div class="time">
+            <div class="hms">09:33:22</div>
+            <div class="date">2020-01-11 星期二</div>
+            <div class="wealth">多云转晴 8-13℃</div>
+        </div>
+        <div class="left">
+            <dic class="warning">
+                <div class="section-title">林火实时警报</div>
+                <div class="warning-list">
+                    <div class="warning-list-item">
+                        <p class="i-title">火险事件</p>
+                        <p>位置经纬度：1053535.2131/852347.78927</p>
+                        <p>事件内容：5·29山东威海森林火灾事件 29日下午3点，山东威海市环翠区仙姑顶景区发生了一起森林火灾，火借风势迅速蔓延。火线一度达7000米。从媒体发布的照片能够看到，山火引发的浓烟一度迷漫到了市区，导致部分市区地段能见度较低，网友用“遮天蔽日”来形容迷漫的浓烟。
+                        </p>
+                        <p>上报时间：2020-01-12 12:22</p>
+                        <p>事件来源：应急管理平台转发</p>
+                    </div>
+                    <div class="warning-list-item">
+                        <p class="i-title">火险事件</p>
+                        <p>位置经纬度：1053535.2131/852347.78927</p>
+                        <p>事件内容：仙姑顶风景区位于威海主城区的西北部，海拔375米，是国家4A级名胜风景区、国家级森林公园。山火发生之后，威海市政府立刻启动了应急预案，组织指挥2000多人的专业扑救队伍参与扑救。期间出动直升机参与施救。距离起火已经过去了16个小时，在火灾的现场，由于今早的风力减弱，经过全市的武警官兵公安干警和各界干部群众的共同努力，局部火情得到了有效的控制。</p>
+                        <p>上报时间：2020-02-16 15:20</p>
+                        <p>事件来源：应急管理平台转发</p>
+                    </div>
+                    <div class="warning-list-item">
+                        <p class="i-title">火险事件</p>
+                        <p>位置经纬度：1053535.2131/852347.78927</p>
+                        <p>事件内容：风力大大减弱，难点是这个地方是国家森林公园，森林密度大，多年积累的易燃物居多，山势陡峭。由于连日的高温影响，当天6~7级大风，火势很快蔓延起来，扑救难度相当大。</p>
+                        <p>上报时间：2020-02-22 18:12</p>
+                        <p>事件来源：应急管理平台转发</p>
+                    </div>
+                    <div class="warning-list-item">
+                        <p class="i-title">火险事件</p>
+                        <p>位置经纬度：1053535.2131/852347.78927</p>
+                        <p>事件内容：威海市委市政府高度重视，一方面组建了全市专业灭火队展开有序灭火，二请求部队和武警官兵扑救，请求有关方面派灭火飞机，请求相邻的烟台等地消防力量前来支援，在现场中国移动威海分公司出动了几辆应急发电车和应急通讯车，并紧急调动了几部机房测试手机和多部终端充电设备，有力保障现场的信号畅通。</p>
+                        <p>上报时间：2020-03-02 08:42</p>
+                        <p>事件来源：应急管理平台转发</p>
+                    </div>
+                </div>
+            </dic>
+            <dic class="chart">
+                <div class="section-title">风险分布总览</div>
+                <div class="chart-pie" id="chart" style="width: 100%;height:100%;">
+                </div>
+            </dic>
+        </div>
+        <div class="middle">
+            <div class="section-title center-align">林区火险等级图</div>
+            <div id="mapGrid">
+                <div class="ToolLib">
+                    <label><strong>图片大小:</strong> </label>
+                    <select id="format">
+                        <option value="a0">A0 (慢)</option>
+                        <option value="a1">A1</option>
+                        <option value="a2">A2</option>
+                        <option value="a3">A3</option>
+                        <option value="a4" selected>A4</option>
+                        <option value="a5">A5 (快)</option>
+                    </select>
+                    <label><strong>分辨率</strong></label>
+                    <select id="resolution">
+                        <option value="72">72 dpi (快)</option>
+                        <option value="150">150 dpi</option>
+                        <option value="300">300 dpi (慢)</option>
+                    </select>
+                    <input type="button" class="ButtonLib" id="export-pdf" value="下载 PDF" />
+                </div>
+                <div class="choose-control" onclick="controlsDispaly(event)">
+                    <!-- <div class="control-item" id="gridControl">网格模式</div> -->
+                    <!-- <div class="control-item" id="3DControl">3D地图模式</div> -->
+                    <div class="control-item" id="mousePositionControl">鼠标坐标</div>
+                    <div class="control-item" id="overviewControl">鹰眼</div>
+                    <div class="control-item" id="scaleControl">比例尺</div>
+                    <div class="control-item" id="distanceCalcControl">距离测量</div>
+                    <div class="control-item" id="areaCalcControl">面积测量</div>
+                    <div class="control-item" id="layersControl">图层选择</div>
+                    <div class="control-item" id="markControl">标注与绘图</div>
+
+                    <!-- <div class="control-item" id="resourcesControl">资源模式</div> -->
+                </div>
+                <div class="model-control" onclick="controlsDispaly(event)">
+                    <div class="control-item " id="gridControl"></div>
+                    <div class="control-item " id="swControl"></div>
+                    <div class="control-item active" id="resourcesControl"></div>
+                </div>
+                <div class="video">
+                    <img src="imgs/video.png" alt="">
+                </div>
+                <div id="mouse-position">
+                </div>
+                <div id="layerControl" class="layerControl">
+                    <div class="title"><label>图层列表</label></div>
+                    <ul id="layerTree" class="layerTree"></ul>
+                </div>
+                <!-- Popup -->
+                <div id="popup" class="ol-popup">
+                    <a href="#" id="popup-closer" class="ol-popup-closer"></a>
+                    <div id="popup-content">
+                    </div>
+                </div>
+                <div id="markPopup" class="ol-popup">
+                    <div id="markPopupContent">
+                        <div style="font-weight: bold;">标注内容</div>
+                        <!-- <textarea name="" id="markTextarea" cols="16" rows="4" style="resize: none;"></textarea> -->
+                        <input name="" id="markTextarea" cols="16" rows="4" style="resize: none;"></textarea>
+                        <button id="markSubmit">确认</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="level">
+                <div class="level-inner">
+                    <div class="level-item">
+                        <div class="level-text">极高风险</div>
+                        <div class="level-line very-danger"></div>
+                    </div>
+                    <div class="level-item">
+                        <div class="level-text">较高风险</div>
+                        <div class="level-line heig-danger"></div>
+                    </div>
+                    <div class="level-item">
+                        <div class="level-text">高风险</div>
+                        <div class="level-line danger"></div>
+                    </div>
+                    <div class="level-item">
+                        <div class="level-text">较低风险</div>
+                        <div class="level-line low"></div>
+                    </div>
+                    <div class="level-item">
+                        <div class="level-text">低风险</div>
+                        <div class="level-line lower"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="right">
+            <div class="section-title">气象站位置与数据</div>
+            <div class="contract-list" id="resourseList">
+                <!-- <div class="contract-list-item">
+                    <div class="i-no no-2">2</div>
+                    <div class="i-label">
+                        <div class="i-text">网格220</div>
+                        <div class="i-num">85</div>
+                        <div class="i-line warning" style="width: 85%;"></div>
+                    </div>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+
+
+</body>
+<script src="js/init_resource.js" type="text/javascript"></script>
+<script src="js/calc_tool.js" type="text/javascript"></script>
+<script src="js/layers_tool.js" type="text/javascript"></script>
+<script src="js/mark_tool.js" type="text/javascript"></script>
+
+</html>

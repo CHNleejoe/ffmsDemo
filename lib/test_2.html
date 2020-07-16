@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>加载3D地形</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <!--Cesium样式表文件引用-->
+    <link type="text/css" rel="stylesheet" href="widgets.css" />
+    <!--当前示例页面样式表引用-->
+    <link rel="stylesheet" href="style.css" />
+    <!--Cesium脚本库文件引用-->
+    <script src="ASDK/Cesium.js" type="text/javascript"></script>
+    <script>
+        //定义三维视图的主要类
+        var webGlobe;
+        //定义地形图层类
+        var terrainlayer;
+
+        //加载三维视图
+        function init() {
+            //构造三维视图类（视图容器div的id，三维视图设置参数）
+            webGlobe = new Cesium.WebSceneControl('GlobeView', { terrainExaggeration: 1, infoBox: true, });
+        }
+     
+        function add() {
+            remove();
+            if (webGlobe) {
+                //添加MapGIS发布的地形图层,场景索引,图层render索引
+                terrainlayer = webGlobe.appendMapGISTerrain('http://develop.smaryun.com:6163/igs/rest/g3d/terrain', 0, 0);
+                webGlobe.flyToEx(120.9819, 23.5307, {
+                    height: 9161,
+                    heading: 30,
+                    pitch: -10,
+                    roll:0
+                });
+            }
+        }
+       
+        function remove() {
+            if (terrainlayer) {
+                //删除添加的地形图层
+                webGlobe.deleteTerrain();
+            }
+        }
+
+    </script>
+</head>
+<body onload="init()">
+    <div class="ToolLib">
+        <button class="ButtonLib" id="add" onclick="add()">添加数据</button>
+        <button class="ButtonLib" id="remove" onclick="remove()">删除数据</button>
+    </div>
+    <div id="GlobeView"></div>
+</body>
+</html>
